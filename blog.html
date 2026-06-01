@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Margin — A Simple Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #faf8f4;
+  --ink: #1c1a17;
+  --muted: #888279;
+  --border: #e5e0d7;
+  --accent: #2563eb;
+  --tag-bg: #eef2ff;
+  --tag-color: #3730a3;
+  --serif: 'Lora', Georgia, serif;
+  --sans: 'Space Grotesk', sans-serif;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); }
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,248,244,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.logo { font-family: var(--serif); font-size: 22px; font-style: italic; color: var(--ink); text-decoration: none; }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a { text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+.nav-right { display: flex; gap: 12px; align-items: center; }
+.btn-nav {
+  padding: 8px 18px; border-radius: 6px; font-size: 13px;
+  font-family: var(--sans); cursor: pointer; font-weight: 500;
+}
+.btn-ghost { background: none; border: 1.5px solid var(--border); color: var(--ink); }
+.btn-solid { background: var(--ink); border: none; color: #fff; }
+
+/* HERO */
+.hero {
+  max-width: 900px; margin: 0 auto;
+  padding: 80px 5vw 60px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+}
+.hero-label {
+  display: inline-block; background: var(--tag-bg); color: var(--tag-color);
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 4px; margin-bottom: 20px;
+}
+.hero-title { font-family: var(--serif); font-size: 42px; line-height: 1.2; margin-bottom: 16px; }
+.hero-title em { color: var(--accent); }
+.hero-meta { color: var(--muted); font-size: 13px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; font-weight: 700;
+}
+.hero-excerpt { color: #6b6560; line-height: 1.7; font-size: 15px; margin-bottom: 28px; }
+.btn-read {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--ink); color: #fff; padding: 12px 22px;
+  border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-read:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.hero-img {
+  aspect-ratio: 4/3; border-radius: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 80px;
+  box-shadow: 0 20px 60px rgba(102,126,234,0.3);
+}
+
+/* FILTER BAR */
+.filter-bar {
+  max-width: 900px; margin: 0 auto;
+  padding: 0 5vw 32px;
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 6px 16px; border-radius: 50px; font-size: 13px;
+  font-family: var(--sans); border: 1.5px solid var(--border);
+  background: #fff; cursor: pointer; color: var(--muted); font-weight: 500;
+  transition: all 0.2s;
+}
+.filter-btn.active, .filter-btn:hover {
+  background: var(--ink); border-color: var(--ink); color: #fff;
+}
+
+/* POSTS GRID */
+.posts-section { max-width: 900px; margin: 0 auto; padding: 0 5vw 80px; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.section-title { font-family: var(--serif); font-size: 22px; }
+.see-all { color: var(--accent); text-decoration: none; font-size: 13px; font-weight: 500; }
+.posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.post-card {
+  border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden; background: #fff;
+  transition: transform 0.25s, box-shadow 0.25s;
+  cursor: pointer;
+}
+.post-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.09); }
+.post-thumb {
+  aspect-ratio: 16/9;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px;
+}
+.post-body { padding: 20px; }
+.post-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 4px; background: var(--tag-bg); color: var(--tag-color);
+  display: inline-block; margin-bottom: 12px;
+}
+.post-title { font-family: var(--serif); font-size: 17px; line-height: 1.4; margin-bottom: 10px; }
+.post-excerpt { color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 16px; }
+.post-footer { display: flex; align-items: center; justify-content: space-between; }
+.post-author { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.mini-avatar {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: #fff;
+}
+.post-read-time { font-size: 11px; color: var(--muted); }
+
+/* NEWSLETTER */
+.newsletter {
+  background: var(--ink); color: #fff;
+  padding: 60px 5vw; text-align: center;
+}
+.newsletter h2 { font-family: var(--serif); font-size: 30px; margin-bottom: 10px; }
+.newsletter p { color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 28px; }
+.newsletter-form { display: flex; gap: 10px; max-width: 400px; margin: 0 auto; }
+.newsletter input {
+  flex: 1; padding: 13px 18px; border-radius: 8px;
+  border: none; font-size: 14px; font-family: var(--sans);
+  background: rgba(255,255,255,0.1); color: #fff; outline: none;
+}
+.newsletter input::placeholder { color: rgba(255,255,255,0.4); }
+.newsletter button {
+  padding: 13px 22px; border-radius: 8px;
+  background: var(--accent); color: #fff; border: none;
+  font-size: 14px; font-family: var(--sans); cursor: pointer; font-weight: 600;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px); z-index: 200;
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+  background: #fff; border-radius: 20px; max-width: 640px; width: 100%;
+  max-height: 85vh; overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-hero { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 80px; border-radius: 20px 20px 0 0; }
+.modal-content { padding: 32px; }
+.modal-tag { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--tag-color); margin-bottom: 12px; }
+.modal-title { font-family: var(--serif); font-size: 28px; line-height: 1.3; margin-bottom: 16px; }
+.modal-meta { color: var(--muted); font-size: 13px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 20px; display: flex; gap: 20px; }
+.modal-body { font-size: 16px; line-height: 1.8; color: #3a3630; }
+.modal-body p { margin-bottom: 16px; }
+.close-btn {
+  position: sticky; top: 16px; float: right; margin: 16px;
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  background: rgba(0,0,0,0.1); color: var(--ink); cursor: pointer;
+  font-size: 18px; display: flex; align-items: center; justify-content: center;
+}
+
+footer {
+  text-align: center; padding: 32px; color: var(--muted); font-size: 13px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-img { display: none; }
+  .posts-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">The Margin</a>
+  <ul class="nav-links">
+    <li><a href="#" class="active" onclick="filterNav('all', this); return false;">Home</a></li>
+    <li><a href="#" onclick="filterNav('Technology', this); return false;">Technology</a></li>
+    <li><a href="#" onclick="filterNav('Design', this); return false;">Design</a></li>
+    <li><a href="#" onclick="filterNav('Culture', this); return false;">Culture</a></li>
+    <li><a href="#" onclick="filterNav('all', this); return false;">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-nav btn-ghost" onclick="window.location.href='signin.html'">Sign In</button>
+    <button class="btn-nav btn-solid" onclick="document.querySelector('.newsletter').scrollIntoView({behavior:'smooth'})">Subscribe</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-label">⭐ Featured Story</div>
+    <h1 class="hero-title">The Quiet Revolution of <em>Slow Design</em></h1>
+    <div class="hero-meta">
+      <div class="avatar">ML</div>
+      <span>Maya Lin · June 1, 2026</span>
+      <span>·</span>
+      <span>6 min read</span>
+    </div>
+    <p class="hero-excerpt">In an age of hyper-stimulation, a growing movement of designers is choosing restraint — building things that ask for your time, not steal it.</p>
+    <a href="#" class="btn-read" onclick="openPost(0); return false;">Read Story →</a>
+  </div>
+  <div class="hero-img">🎨</div>
+</section>
+
+<!-- FILTER -->
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterPosts('all', this)">All</button>
+  <button class="filter-btn" onclick="filterPosts('Technology', this)">Technology</button>
+  <button class="filter-btn" onclick="filterPosts('Design', this)">Design</button>
+  <button class="filter-btn" onclick="filterPosts('Culture', this)">Culture</button>
+  <button class="filter-btn" onclick="filterPosts('Science', this)">Science</button>
+</div>
+
+<!-- POSTS -->
+<section class="posts-section">
+  <div class="section-header">
+    <h2 class="section-title">Recent Posts</h2>
+    <a href="#" class="see-all">See all →</a>
+  </div>
+  <div class="posts-grid" id="postsGrid"></div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <h2>Stay in the Margin.</h2>
+  <p>One thoughtful essay, every Sunday. No fluff, no spam.</p>
+  <div class="newsletter-form">
+    <input type="email" placeholder="your@email.com">
+    <button onclick="this.textContent='✓ Done!'">Subscribe</button>
+  </div>
+</section>
+
+<footer>
+  © 2026 The Margin · Made with ♥ · <a href="#" style="color:inherit">Privacy</a>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal">
+    <button class="close-btn" onclick="closeModal()">✕</button>
+    <div class="modal-hero" id="modalHero"></div>
+    <div class="modal-content">
+      <div class="modal-tag" id="modalTag"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const posts = [
+  {
+    emoji: "🎨", color: "linear-gradient(135deg,#667eea,#764ba2)", tag: "Design", author: "Maya Lin", authorColor: "#764ba2",
+    title: "The Quiet Revolution of Slow Design",
+    excerpt: "How restraint became the boldest statement in modern UX.",
+    date: "June 1, 2026", readTime: "6 min",
+    body: `<p>In an age of hyper-stimulation, a growing movement of designers is choosing restraint. They call it "slow design" — not slow in speed, but slow in intention. Every element earns its place. Nothing begs for attention.</p><p>The roots of this movement trace back to the Scandinavian design philosophies of the 1960s, where form followed function not as a compromise, but as a celebration. Today's practitioners are rediscovering this ethos, applying it to digital products suffering from feature bloat and dark patterns.</p><p>What does slow design look like in practice? Fewer notifications. Deliberate loading states. Typography that breathes. Interfaces that respect your time rather than exploit your attention. It is, in essence, design with a conscience.</p>`
+  },
+  {
+    emoji: "🤖", color: "linear-gradient(135deg,#11998e,#38ef7d)", tag: "Technology", author: "James Park", authorColor: "#11998e",
+    title: "What AI Still Can't Do (And Why That Matters)",
+    excerpt: "Beyond the hype — an honest look at the limits of machine intelligence.",
+    date: "May 28, 2026", readTime: "8 min",
+    body: `<p>Artificial intelligence can write sonnets, debug code, and compose symphonies. It can diagnose diseases and predict weather patterns with uncanny accuracy. So what, exactly, can it not do?</p><p>The answer, it turns out, is quite a lot — and understanding the gaps is more important than celebrating the capabilities. AI systems, no matter how sophisticated, lack genuine embodied understanding. They process tokens, not experiences.</p><p>Consider: an AI can describe the sensation of cold water with poetic precision, drawing on millions of descriptions from human writers. But it has never been cold. This distinction — between describing and experiencing — sits at the heart of what intelligence means.</p>`
+  },
+  {
+    emoji: "🌿", color: "linear-gradient(135deg,#f093fb,#f5576c)", tag: "Culture", author: "Sara Okonkwo", authorColor: "#f5576c",
+    title: "Why We Need Boredom Back",
+    excerpt: "The neuroscience of daydreaming and the creativity it unlocks.",
+    date: "May 22, 2026", readTime: "5 min",
+    body: `<p>Your best ideas probably didn't arrive when you were staring at a screen. They came in the shower, on a walk, in those drowsy moments before sleep. This is not a coincidence — it is neuroscience.</p><p>The brain's default mode network, active during unfocused rest, is the seat of creative synthesis. It's where disparate ideas merge, where problems resolve themselves without effort, where imagination runs free. And we are systematically starving it.</p><p>Every notification, every scroll, every podcast filling our commute is robbing us of the productive nothing that our minds desperately need. The case for boredom is, paradoxically, a case for richer mental lives.</p>`
+  },
+  {
+    emoji: "🔭", color: "linear-gradient(135deg,#4facfe,#00f2fe)", tag: "Science", author: "Dr. Chen Wei", authorColor: "#4facfe",
+    title: "Light from the Edge of Time",
+    excerpt: "New telescope data is rewriting our understanding of the early universe.",
+    date: "May 18, 2026", readTime: "7 min",
+    body: `<p>Astronomers have detected light from a galaxy so distant that it was formed just 280 million years after the Big Bang — a mere blink in cosmic time. The data challenges existing models of early star formation and raises profound questions about how structure emerges from chaos.</p><p>The images, sharp enough to resolve individual stellar clusters, reveal galaxies that are far more mature than theory predicted. This is not a minor discrepancy — it suggests that our models of cosmic evolution may need fundamental revision.</p><p>For physicists, this is exciting and unsettling in equal measure. Science advances by breaking its own rules.</p>`
+  },
+  {
+    emoji: "🏙️", color: "linear-gradient(135deg,#fa709a,#fee140)", tag: "Culture", author: "Leila Hassan", authorColor: "#fa709a",
+    title: "The Cities We Almost Built",
+    excerpt: "A tour through history's most ambitious — and abandoned — urban utopias.",
+    date: "May 12, 2026", readTime: "9 min",
+    body: `<p>History is littered with cities that existed only on paper — ambitious visions of how humanity might live if only we had the will, the money, or the politics to build them. These phantom metropolises reveal more about their eras than the cities that were actually built.</p><p>From Le Corbusier's towers-in-a-park to the geodesic domes of Buckminster Fuller, the twentieth century was particularly fertile ground for urban utopias. Each reflected a belief that the right arrangement of space could solve the problems of society.</p><p>What happened to these dreams? In most cases, reality intervened — in the form of budgets, politics, community resistance, or simply the passage of time. But the ideas themselves never quite died.</p>`
+  },
+  {
+    emoji: "💻", color: "linear-gradient(135deg,#a18cd1,#fbc2eb)", tag: "Technology", author: "Marcus Teel", authorColor: "#a18cd1",
+    title: "The Open Source Renaissance",
+    excerpt: "How volunteer-driven software quietly powers the modern world.",
+    date: "May 6, 2026", readTime: "6 min",
+    body: `<p>The software powering your bank, your hospital, your government probably runs on code written by volunteers — people who contributed their evenings and weekends to projects they believed in. This is open source software, and its triumph is one of the quiet miracles of our age.</p><p>Linux runs most of the world's servers. PostgreSQL stores critical financial data. Python has become the lingua franca of science and AI. All of them are freely available, freely modifiable, maintained by communities rather than corporations.</p><p>The model works because it aligns incentives in unexpected ways. Companies contribute to projects they depend on. Individuals gain reputation and skill. Users get software that no single company could afford to build alone.</p>`
+  },
+];
+
+let currentFilter = 'all';
+
+function renderPosts(filter) {
+  const grid = document.getElementById('postsGrid');
+  const filtered = filter === 'all' ? posts : posts.filter(p => p.tag === filter);
+  grid.innerHTML = filtered.map((p, i) => {
+    const origIdx = posts.indexOf(p);
+    return `
+    <div class="post-card" onclick="openPost(${origIdx})">
+      <div class="post-thumb" style="background:${p.color}">${p.emoji}</div>
+      <div class="post-body">
+        <div class="post-tag">${p.tag}</div>
+        <div class="post-title">${p.title}</div>
+        <div class="post-excerpt">${p.excerpt}</div>
+        <div class="post-footer">
+          <div class="post-author">
+            <div class="mini-avatar" style="background:${p.authorColor}">${p.author[0]}</div>
+            ${p.author}
+          </div>
+          <span class="post-read-time">${p.readTime}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterNav(filter, link) {
+  document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active"));
+  link.classList.add("active");
+  document.querySelectorAll(".filter-btn").forEach(b => {
+    const match = b.textContent.trim() === filter || (filter === "all" && b.textContent.trim() === "All");
+    b.classList.toggle("active", match);
+  });
+  renderPosts(filter);
+  document.querySelector(".posts-section").scrollIntoView({ behavior: "smooth" });
+}
+
+function filterPosts(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPosts(filter);
+}
+
+function openPost(idx) {
+  const p = posts[idx];
+  document.getElementById('modalHero').style.background = p.color;
+  document.getElementById('modalHero').textContent = p.emoji;
+  document.getElementById('modalTag').textContent = p.tag;
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalMeta').innerHTML = `
+    <span>✍️ ${p.author}</span>
+    <span>📅 ${p.date}</span>
+    <span>⏱️ ${p.readTime} read</span>`;
+  document.getElementById('modalBody').innerHTML = p.body;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+renderPosts('all');
+</script>
+</body>
+</html>
